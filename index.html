@@ -13,6 +13,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            background-color: #000000; /* Dark background behind the bg image */
             background-image: url('bg.png'); /* Replace with your background image URL */
             background-size: cover;
             background-position: center;
@@ -28,12 +29,12 @@
 
         #zoos {
             position: absolute;
-            top: 50px;
-            left: 50px;
-            z-index: 1;
-            background-color: black; /* Black background behind Zoos */
-            padding: 10px;
-            border-radius: 10px;
+            top: 50%;
+            left: calc(50% - 200px); /* Adjusted left position for Zoos */
+            transform: translateY(-50%);
+            z-index: 9;
+            width: auto;
+            height: 150px; /* Adjust height as needed */
         }
 
         .hidden-iframe {
@@ -55,39 +56,6 @@
     </iframe>
 
     <script>
-        const zoos = document.getElementById("zoos");
-        const countdown = document.getElementById("countdown");
-        let zoosX = Math.random() * (window.innerWidth - zoos.offsetWidth);
-        let zoosY = Math.random() * (window.innerHeight - zoos.offsetHeight);
-        let zoosDX = 2;
-        let zoosDY = 2;
-
-        function moveZoos() {
-            zoosX += zoosDX;
-            zoosY += zoosDY;
-
-            if (zoosX + zoos.offsetWidth > window.innerWidth || zoosX < 0) {
-                zoosDX *= -1;
-                changeSize();
-            }
-
-            if (zoosY + zoos.offsetHeight > window.innerHeight || zoosY < 0) {
-                zoosDY *= -1;
-                changeSize();
-            }
-
-            zoos.style.left = zoosX + 'px';
-            zoos.style.top = zoosY + 'px';
-        }
-
-        function changeSize() {
-            const newSize = Math.random() * 100 + 50; // Random size between 50px and 150px
-            zoos.style.width = newSize + 'px';
-            zoos.style.height = 'auto';
-        }
-
-        setInterval(moveZoos, 20); // Move Zoos every 20ms
-
         // Update countdown timer (dummy example, replace with your actual timer logic)
         function updateCountdown() {
             const now = new Date();
