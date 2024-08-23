@@ -9,53 +9,34 @@
             margin: 0;
             padding: 0;
             height: 100%;
-            background-color: black;
-            font-family: 'Courier New', Courier, monospace;
-            color: darkred;
             overflow: hidden;
-        }
-
-        .container {
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100%;
+            background-image: url('bg.png'); /* Replace with your background image URL */
+            background-size: cover;
+            background-position: center;
+            color: #222222; /* Dark text color */
+        }
+
+        #countdown {
+            font-family: "Gravity Falls Font", sans-serif;
+            font-size: 48px;
             position: relative;
+            z-index: 10; /* Ensure countdown is on top */
         }
 
-        .background-image {
+        #zoos {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            top: 50px;
+            left: 50px;
             z-index: 1;
+            background-color: black; /* Black background behind Zoos */
+            padding: 10px;
+            border-radius: 10px;
         }
 
-        .countdown {
-            z-index: 2;
-            font-size: 3em;
-            text-shadow: 2px 2px 5px black;
-            border: none;
-            background: none;
-        }
-
-        .zoos-image {
-            position: absolute;
-            top: 50%;
-            left: 40%;
-            transform: translate(-50%, -50%);
-            width: 250px;
-            z-index: 3;
-        }
-
-        .timer-container {
-            z-index: 2;
-        }
-
-        .music-iframe {
+        .hidden-iframe {
             position: absolute;
             width: 0;
             height: 0;
@@ -64,43 +45,59 @@
     </style>
 </head>
 <body>
+    <div id="countdown">00:00:00</div>
+    <img id="zoos" src="soos.png" alt="Zoos"> <!-- Replace with your Zoos image URL -->
 
-    <div class="container">
-        <img src="bg.png" alt="Background" class="background-image">
-        <div class="timer-container">
-            <div id="countdown" class="countdown"></div>
-        </div>
-        <img src="soos.png" alt="Zoos" class="zoos-image">
-    </div>
-
-    <iframe class="music-iframe" 
-            src="https://www.youtube.com/embed/YAVANCPLtaE?autoplay=1&loop=1&playlist=YAVANCPLtaE" 
+    <!-- Background music -->
+    <iframe class="hidden-iframe" 
+            src="https://www.youtube.com/embed/YAVANCPLtaE?autoplay=1&loop=1&playlist=YAVANCPLtaE"
             allow="autoplay">
     </iframe>
 
     <script>
-        function countdownTimer() {
-            const eventDate = new Date('2024-08-25T00:00:00').getTime();
-            const now = new Date().getTime();
-            const timeLeft = eventDate - now;
+        const zoos = document.getElementById("zoos");
+        const countdown = document.getElementById("countdown");
+        let zoosX = Math.random() * (window.innerWidth - zoos.offsetWidth);
+        let zoosY = Math.random() * (window.innerHeight - zoos.offsetHeight);
+        let zoosDX = 2;
+        let zoosDY = 2;
 
-            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+        function moveZoos() {
+            zoosX += zoosDX;
+            zoosY += zoosDY;
 
-            document.getElementById('countdown').innerHTML = 
-                days + 'd ' + 
-                hours + 'h ' + 
-                minutes + 'm ' + 
-                seconds + 's ';
-
-            if (timeLeft < 0) {
-                document.getElementById('countdown').innerHTML = "haha get fooled";
+            if (zoosX + zoos.offsetWidth > window.innerWidth || zoosX < 0) {
+                zoosDX *= -1;
+                changeSize();
             }
+
+            if (zoosY + zoos.offsetHeight > window.innerHeight || zoosY < 0) {
+                zoosDY *= -1;
+                changeSize();
+            }
+
+            zoos.style.left = zoosX + 'px';
+            zoos.style.top = zoosY + 'px';
         }
 
-        setInterval(countdownTimer, 1000);
+        function changeSize() {
+            const newSize = Math.random() * 100 + 50; // Random size between 50px and 150px
+            zoos.style.width = newSize + 'px';
+            zoos.style.height = 'auto';
+        }
+
+        setInterval(moveZoos, 20); // Move Zoos every 20ms
+
+        // Update countdown timer (dummy example, replace with your actual timer logic)
+        function updateCountdown() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            countdown.textContent = `${hours}:${minutes}:${seconds}`;
+        }
+
+        setInterval(updateCountdown, 1000);
     </script>
 </body>
 </html>
